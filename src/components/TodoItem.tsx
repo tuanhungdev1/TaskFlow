@@ -4,8 +4,8 @@ interface Props {
 
 const TodoItem = ({ name }: Props) => {
   return (
-    <div>
-      <p>{name}</p>
+    <div className="todo-item">
+      <p className="todo-item-text">{name}</p>
     </div>
   );
 };
