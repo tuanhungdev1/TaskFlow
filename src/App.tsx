@@ -8,24 +8,49 @@ const App = () => {
       id: "1",
       name: "Đi học thêm",
       isInportant: true,
+      isCompleted: false,
     },
     {
       id: "2",
       name: "Đi học võ",
       isInportant: false,
+      isCompleted: true,
     },
     {
       id: "3",
       name: "Đi chơi với bạn bè",
       isInportant: true,
+      isCompleted: false,
     },
   ]);
 
   const inputRef = useRef<HTMLInputElement>(null);
 
+  const handleCheckedTask = (id: string) => {
+    const newTodoList = todoList.map((item) => {
+      if (item.id === id) {
+        return {
+          ...item,
+          isCompleted: !item.isCompleted,
+        };
+      } else {
+        return item;
+      }
+    });
+
+    setTodoList([...newTodoList]);
+  };
+
   const todos = todoList.map((todo) => {
     return (
-      <TodoItem name={todo.name} key={todo.id} isInportant={todo.isInportant} />
+      <TodoItem
+        name={todo.name}
+        key={todo.id}
+        isInportant={todo.isInportant}
+        id={todo.id}
+        isCompleted={todo.isCompleted}
+        onCompletedTask={handleCheckedTask}
+      />
     );
   });
 
@@ -47,6 +72,7 @@ const App = () => {
                 id: crypto.randomUUID(),
                 name: value,
                 isInportant: true,
+                isCompleted: false,
               },
             ]);
 
