@@ -12,6 +12,12 @@
   margin-bottom: 5px;
 }
 
+.todo-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
 .container {
   background-color: #f0f0f0;
   padding: 30px;
