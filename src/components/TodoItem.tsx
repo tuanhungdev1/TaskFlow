@@ -4,6 +4,7 @@ interface Props {
   isInportant: boolean;
   isCompleted: boolean;
   onCompletedTask: (id: string) => void;
+  onShowSidebarClick: (id: string) => void;
 }
 
 const TodoItem = ({
@@ -12,9 +13,10 @@ const TodoItem = ({
   isInportant,
   isCompleted,
   onCompletedTask,
+  onShowSidebarClick,
 }: Props) => {
   return (
-    <div className="todo-item">
+    <div className="todo-item" onClick={() => onShowSidebarClick(id)}>
       <div
         style={{
           display: "flex",

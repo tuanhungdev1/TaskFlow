@@ -1,0 +1,48 @@
+.sidebar {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  width: 40vw;
+  background-color: white;
+  box-shadow: -2px 0 3px gray;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.sb-field-first {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+}
+
+.sb-field-first input {
+  padding: 8px;
+}
+
+.sb-field-first,
+.sb-field label {
+  font-size: 20px;
+}
+
+.sb-form {
+  padding: 10px;
+}
+
+.sb-field {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.sb-button {
+  padding: 10px;
+  border-top: 1px solid gray;
+  display: flex;
+  gap: 10px;
+}
+
+.sb-button button {
+  padding: 5px 10px;
+}

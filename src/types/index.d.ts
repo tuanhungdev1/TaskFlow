@@ -1,6 +1,6 @@
 export interface IToDoItem {
   id: string;
   name: string;
-  isInportant: boolean;
+  isImportant: boolean;
   isCompleted: boolean;
 }

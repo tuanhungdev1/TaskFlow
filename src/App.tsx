@@ -2,29 +2,36 @@ import { useRef, useState } from "react";
 import "./App.css";
 import TodoItem from "./components/TodoItem";
 import { IToDoItem } from "./types";
+import Sidebar from "./components/Sidebar";
 const App = () => {
   const [todoList, setTodoList] = useState<IToDoItem[]>([
     {
       id: "1",
       name: "Đi học thêm",
-      isInportant: true,
+      isImportant: true,
       isCompleted: false,
     },
     {
       id: "2",
       name: "Đi học võ",
-      isInportant: false,
+      isImportant: false,
       isCompleted: true,
     },
     {
       id: "3",
       name: "Đi chơi với bạn bè",
-      isInportant: true,
+      isImportant: true,
       isCompleted: false,
     },
   ]);
 
+  const [showSidebar, setShowSidebar] = useState(false);
+
+  const [activeTodoItemId, setActiveTodoItemId] = useState<string | null>(null);
+
   const inputRef = useRef<HTMLInputElement>(null);
+
+  const activeTodoItem = todoList.find((todo) => todo.id === activeTodoItemId);
 
   const handleCheckedTask = (id: string) => {
     const newTodoList = todoList.map((item) => {
@@ -41,12 +48,33 @@ const App = () => {
     setTodoList([...newTodoList]);
   };
 
+  const handleShowSidebarClick = (id: string) => {
+    setShowSidebar(true);
+    setActiveTodoItemId(id);
+  };
+
+  const handleUpdateTask = (task: IToDoItem) => {
+    const newTodoListUpdated = todoList.map((todo) => {
+      if (todo.id === task.id) {
+        return {
+          ...todo,
+          ...task,
+        };
+      } else {
+        return todo;
+      }
+    });
+
+    setTodoList([...newTodoListUpdated]);
+  };
+
   const todos = todoList.map((todo) => {
     return (
       <TodoItem
+        onShowSidebarClick={handleShowSidebarClick}
         name={todo.name}
         key={todo.id}
-        isInportant={todo.isInportant}
+        isInportant={todo.isImportant}
         id={todo.id}
         isCompleted={todo.isCompleted}
         onCompletedTask={handleCheckedTask}
@@ -71,7 +99,7 @@ const App = () => {
               {
                 id: crypto.randomUUID(),
                 name: value,
-                isInportant: true,
+                isImportant: true,
                 isCompleted: false,
               },
             ]);
@@ -83,6 +111,15 @@ const App = () => {
         }}
       />
       <div>{todos}</div>
+
+      {showSidebar && (
+        <Sidebar
+          key={activeTodoItemId}
+          onShowSidebarClick={() => setShowSidebar(false)}
+          todoItem={activeTodoItem}
+          onUpdateTask={handleUpdateTask}
+        />
+      )}
     </div>
   );
 };
