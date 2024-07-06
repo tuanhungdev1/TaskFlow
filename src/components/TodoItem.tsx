@@ -25,6 +25,9 @@ const TodoItem = ({
       >
         <input
           type="checkbox"
+          onClick={(e: React.MouseEvent) => {
+            e.stopPropagation();
+          }}
           checked={isCompleted}
           onChange={() => onCompletedTask(id)}
         />
