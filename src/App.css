@@ -1,3 +1,10 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
 .task-input,
 .todo-item {
   border: 0;
@@ -5,7 +12,7 @@
   width: 100%;
   padding: 3px 5px;
   border-radius: 3px;
-  box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.1);
   margin-bottom: 5px;
 }
 
@@ -20,4 +27,8 @@
   padding: 30px;
 }
 
-
+.grid-layout {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  height: 100vh;
+}

@@ -3,4 +3,5 @@ export interface IToDoItem {
   name: string;
   isImportant: boolean;
   isCompleted: boolean;
+  isDeleted: boolean;
 }
