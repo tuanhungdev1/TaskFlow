@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { IToDoItem } from "../types";
 import "./Sidebar.css";
+import { CatigoriesListItem } from "../constants";
 
 interface Props {
   onShowSidebarClick: () => void;
@@ -12,6 +13,7 @@ const Sidebar = ({ onShowSidebarClick, onUpdateTask, todoItem }: Props) => {
   const [nameTask, setNameTask] = useState(todoItem?.name);
   const [isCompleted, setIsCompleted] = useState(todoItem?.isCompleted);
   const [isImportant, setIsImportant] = useState(todoItem?.isImportant);
+  const [categoryId, setCategoryId] = useState(todoItem?.categoryId);
 
   const handleUpdateTask = () => {
     onUpdateTask({
@@ -19,8 +21,13 @@ const Sidebar = ({ onShowSidebarClick, onUpdateTask, todoItem }: Props) => {
       name: nameTask!,
       isCompleted: isCompleted!,
       isImportant: isImportant!,
+      categoryId: categoryId,
     } as IToDoItem);
     onShowSidebarClick();
+  };
+
+  const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setCategoryId(e.target.value);
   };
 
   return (
@@ -59,6 +66,15 @@ const Sidebar = ({ onShowSidebarClick, onUpdateTask, todoItem }: Props) => {
             }}
           />
         </div>
+        <select value={categoryId} onChange={handleCategoryChange}>
+          {CatigoriesListItem.map((item) => {
+            return (
+              <option key={item.id} value={item.id}>
+                {item.title}
+              </option>
+            );
+          })}
+        </select>
       </form>
       <div className="sb-button">
         <button onClick={handleUpdateTask}>Save</button>

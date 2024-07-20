@@ -12,6 +12,7 @@ const App = () => {
       isImportant: true,
       isCompleted: false,
       isDeleted: false,
+      categoryId: "company",
     },
     {
       id: "2",
@@ -19,6 +20,7 @@ const App = () => {
       isImportant: false,
       isCompleted: true,
       isDeleted: false,
+      categoryId: "ideal",
     },
     {
       id: "3",
@@ -26,6 +28,7 @@ const App = () => {
       isImportant: true,
       isCompleted: false,
       isDeleted: false,
+      categoryId: "personal",
     },
   ]);
 
@@ -130,6 +133,7 @@ const App = () => {
                   isImportant: true,
                   isCompleted: false,
                   isDeleted: false,
+                  categoryId: "personal",
                 },
               ]);
 
