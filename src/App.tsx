@@ -1,37 +1,11 @@
 import { useMemo, useRef, useState } from "react";
 import "./App.css";
 import TodoItem from "./components/TodoItem";
-import { IToDoItem } from "./types";
+
 import Sidebar from "./components/Sidebar";
 import FilterPanel from "./components/FilterPanel";
+import { useAppContext } from "./context/AppContext";
 const App = () => {
-  const [todoList, setTodoList] = useState<IToDoItem[]>([
-    {
-      id: "1",
-      name: "Đi học thêm",
-      isImportant: true,
-      isCompleted: false,
-      isDeleted: false,
-      categoryId: "company",
-    },
-    {
-      id: "2",
-      name: "Đi học võ",
-      isImportant: false,
-      isCompleted: true,
-      isDeleted: false,
-      categoryId: "ideal",
-    },
-    {
-      id: "3",
-      name: "Đi chơi với bạn bè",
-      isImportant: true,
-      isCompleted: false,
-      isDeleted: false,
-      categoryId: "personal",
-    },
-  ]);
-
   const [selectedFilterId, setSelectedFilterId] = useState("all");
 
   const [showSidebar, setShowSidebar] = useState(false);
@@ -42,22 +16,16 @@ const App = () => {
 
   const inputRef = useRef<HTMLInputElement>(null);
 
+  const { todoList } = useAppContext();
+
   const activeTodoItem = todoList.find((todo) => todo.id === activeTodoItemId);
 
-  const handleCheckedTask = (id: string) => {
-    const newTodoList = todoList.map((item) => {
-      if (item.id === id) {
-        return {
-          ...item,
-          isCompleted: !item.isCompleted,
-        };
-      } else {
-        return item;
-      }
-    });
-
-    setTodoList([...newTodoList]);
-  };
+  const {
+    selectedCategoryId,
+    handleCheckedTask,
+    hanldeAddTask,
+    handleUpdateTask,
+  } = useAppContext();
 
   const handleSearchValueChange = (
     e: React.ChangeEvent<HTMLInputElement>
@@ -70,23 +38,11 @@ const App = () => {
     setActiveTodoItemId(id);
   };
 
-  const handleUpdateTask = (task: IToDoItem) => {
-    const newTodoListUpdated = todoList.map((todo) => {
-      if (todo.id === task.id) {
-        return {
-          ...todo,
-          ...task,
-        };
-      } else {
-        return todo;
-      }
-    });
-
-    setTodoList([...newTodoListUpdated]);
-  };
-
   const todos = useMemo(() => {
     return todoList.filter((item) => {
+      if (!item.categoryId.includes(selectedCategoryId)) {
+        return false;
+      }
       if (!item.name.includes(searchValue)) {
         return false;
       }
@@ -101,7 +57,7 @@ const App = () => {
           return item.isImportant === true;
       }
     });
-  }, [todoList, selectedFilterId, searchValue]);
+  }, [todoList, selectedFilterId, searchValue, selectedCategoryId]);
 
   return (
     <div className="grid-layout">
@@ -124,18 +80,14 @@ const App = () => {
           onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
             if (e.key === "Enter") {
               const value = e.currentTarget.value;
-
-              setTodoList([
-                ...todoList,
-                {
-                  id: crypto.randomUUID(),
-                  name: value,
-                  isImportant: true,
-                  isCompleted: false,
-                  isDeleted: false,
-                  categoryId: "personal",
-                },
-              ]);
+              hanldeAddTask({
+                id: crypto.randomUUID(),
+                name: value,
+                isImportant: true,
+                isCompleted: false,
+                isDeleted: false,
+                categoryId: "personal",
+              });
 
               if (inputRef.current) {
                 inputRef.current.value = "";
