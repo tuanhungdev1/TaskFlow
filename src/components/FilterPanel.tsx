@@ -4,11 +4,14 @@ import { GrCompliance } from "react-icons/gr";
 import { MdOutlineNotificationImportant } from "react-icons/md";
 import { MdOutlineAutoDelete } from "react-icons/md";
 import { IToDoItem } from "../types";
+import { useMemo } from "react";
 
 interface Props {
   selectedFilterId: string;
   todoList: IToDoItem[];
   onSelectedFilter: (id: string) => void;
+  searchValue: string;
+  onSearchChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 interface FilterItem {
@@ -51,32 +54,42 @@ const FilterPanel = ({
   selectedFilterId,
   todoList,
   onSelectedFilter,
+  searchValue,
+  onSearchChange,
 }: Props) => {
-  const countFilterforPannel = todoList.reduce(
-    (prev, curr) => {
-      const tempCountFilter = { ...prev } as CountFilter;
-      if (curr.isCompleted) {
-        tempCountFilter.completed++;
-      }
-      if (curr.isImportant) {
-        tempCountFilter.important++;
-      }
-      if (curr.isDeleted) {
-        tempCountFilter.deleted++;
-      }
-      return tempCountFilter;
-    },
-    {
-      all: todoList.length,
-      completed: 0,
-      important: 0,
-      deleted: 0,
-    } as CountFilter
-  );
+  const countFilterforPannel = useMemo(() => {
+    return todoList.reduce(
+      (prev, curr) => {
+        const tempCountFilter = { ...prev } as CountFilter;
+        if (curr.isCompleted) {
+          tempCountFilter.completed++;
+        }
+        if (curr.isImportant) {
+          tempCountFilter.important++;
+        }
+        if (curr.isDeleted) {
+          tempCountFilter.deleted++;
+        }
+        return tempCountFilter;
+      },
+      {
+        all: todoList.length,
+        completed: 0,
+        important: 0,
+        deleted: 0,
+      } as CountFilter
+    );
+  }, [todoList]);
 
   return (
     <div className="filter-panel">
-      <input type="text" className="search" placeholder="Search Todo..." />
+      <input
+        type="text"
+        className="search"
+        placeholder="Search Todo..."
+        onChange={onSearchChange}
+        value={searchValue}
+      />
 
       <div className="filter-item-list">
         {FilterPanelItem.map((item) => {

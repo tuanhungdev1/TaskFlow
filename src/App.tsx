@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import "./App.css";
 import TodoItem from "./components/TodoItem";
 import { IToDoItem } from "./types";
@@ -35,6 +35,8 @@ const App = () => {
 
   const [activeTodoItemId, setActiveTodoItemId] = useState<string | null>(null);
 
+  const [searchValue, setSearchValue] = useState("");
+
   const inputRef = useRef<HTMLInputElement>(null);
 
   const activeTodoItem = todoList.find((todo) => todo.id === activeTodoItemId);
@@ -52,6 +54,12 @@ const App = () => {
     });
 
     setTodoList([...newTodoList]);
+  };
+
+  const handleSearchValueChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ): void => {
+    setSearchValue(e.target.value);
   };
 
   const handleShowSidebarClick = (id: string) => {
@@ -74,8 +82,11 @@ const App = () => {
     setTodoList([...newTodoListUpdated]);
   };
 
-  const todos = todoList
-    .filter((item) => {
+  const todos = useMemo(() => {
+    return todoList.filter((item) => {
+      if (!item.name.includes(searchValue)) {
+        return false;
+      }
       switch (selectedFilterId) {
         case "all":
           return true;
@@ -86,20 +97,8 @@ const App = () => {
         case "important":
           return item.isImportant === true;
       }
-    })
-    .map((todo) => {
-      return (
-        <TodoItem
-          onShowSidebarClick={handleShowSidebarClick}
-          name={todo.name}
-          key={todo.id}
-          isInportant={todo.isImportant}
-          id={todo.id}
-          isCompleted={todo.isCompleted}
-          onCompletedTask={handleCheckedTask}
-        />
-      );
     });
+  }, [todoList, selectedFilterId, searchValue]);
 
   return (
     <div className="grid-layout">
@@ -108,6 +107,8 @@ const App = () => {
           todoList={todoList}
           selectedFilterId={selectedFilterId}
           onSelectedFilter={setSelectedFilterId}
+          searchValue={searchValue}
+          onSearchChange={handleSearchValueChange}
         />
       </div>
       <div className="container">
@@ -138,7 +139,21 @@ const App = () => {
             }
           }}
         />
-        <div>{todos}</div>
+        <div>
+          {todos.map((todo) => {
+            return (
+              <TodoItem
+                onShowSidebarClick={handleShowSidebarClick}
+                name={todo.name}
+                key={todo.id}
+                isInportant={todo.isImportant}
+                id={todo.id}
+                isCompleted={todo.isCompleted}
+                onCompletedTask={handleCheckedTask}
+              />
+            );
+          })}
+        </div>
 
         {showSidebar && (
           <Sidebar
