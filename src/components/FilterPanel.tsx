@@ -5,6 +5,7 @@ import { MdOutlineNotificationImportant } from "react-icons/md";
 import { MdOutlineAutoDelete } from "react-icons/md";
 import { IToDoItem } from "../types";
 import { useMemo } from "react";
+import CategoriesList from "./CategoriesList";
 
 interface Props {
   selectedFilterId: string;
@@ -110,6 +111,8 @@ const FilterPanel = ({
           );
         })}
       </div>
+
+      <CategoriesList />
     </div>
   );
 };
